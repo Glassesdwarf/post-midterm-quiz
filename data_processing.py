@@ -2,6 +2,11 @@ import csv, os
 
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
+movies = []
+with open(os.path.join(__location__, 'movies.csv')) as f:
+    rows = csv.DictReader(f)
+    for r in rows:
+        movies.append(dict(r))
 
 class DB:
     def __init__(self):
@@ -100,3 +105,17 @@ class Table:
     def __str__(self):
         return self.table_name + ':' + str(self.table)
 
+
+table1 = Table('movies', movies)
+
+my_DB = DB()
+my_DB.insert(table1)
+my_table1 = my_DB.search('movies')
+print("Test filter: only filtering out ") 
+my_table1_filtered = my_table1.filter(lambda x: x['Genre'] == 'Comedy')
+print(my_table1_filtered)
+
+worldgross = (my_table1_filtered.aggregate(lambda x: sum(x)/len(x), 'Worldwide Gross'))
+print(f'Worldwide gross of comedy movie is {worldgross:.2f}')
+my_table1_filtered2 = my_table1.filter(lambda x: x['Genre'] == 'Drama')
+print("Min audience score:", my_table1_filtered2.aggregate(lambda x: min(x), 'Audience score %'))
