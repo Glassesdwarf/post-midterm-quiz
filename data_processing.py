@@ -104,6 +104,16 @@ class Table:
 
     def __str__(self):
         return self.table_name + ':' + str(self.table)
+     def insert_row(self, dict):
+        '''
+        This method inserts a dictionary, dict, into a Table object, effectively adding a row to the Table. 
+        '''
+        self.table.append(dict)
+    def update_row(self, primary_attribute, primary_attribute_value, update_attribute, update_value):
+        for i in self:
+            if self[primary_attribute] == primary_attribute_value
+                self[update_attribute] == update_value
+
 
 
 table1 = Table('movies', movies)
